@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component,NgZone, Injectable, Optional } from '@angular/core';
 import { Translate } from '@google-cloud/translate';
+declare var gapi: any;
 
 @Component({
   selector: 'app-root',
@@ -7,17 +8,50 @@ import { Translate } from '@google-cloud/translate';
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent {
+export class AppComponent{
   title = 'app';
   projectId = "internationalize-1523953329065";
-  translate:Translate = new Translate({ projectId: this.projectId});
+  zone:NgZone;
 
-  translateText(source:String,dest:String,text:String){
-  	this.translate.translate(dest,source,dest)
-  	.then(results=>{
-  		
-  	});
+  ngOnInit(): void {
+    // this.apiLoaderService.loadClient().then(
+    //     result => this.apiLoaded = true,
+    //     err => this.apiLoaded = false
+    // );
   }
+
+  initClient(): Promise<any> {
+    var API_KEY = "AIzaSyD2vreIeczCP7dnp5T2mHhptkHFlr6UFrA";
+    var DISCOVERY_DOC = "";
+    var initObj = {
+        'apiKey': API_KEY,
+        'discoveryDocs': [DISCOVERY_DOC],
+    };
+
+    return new Promise((resolve, reject) => {
+        this.zone.run(() => {
+            gapi.client.init(initObj).then(resolve, reject);
+        });
+    });
+}
+  // Imports the Google Cloud client library
+ // Translate = require('@google-cloud/translate');
+ 
+// Your Google Cloud Platform project ID
+// const projectId = 'YOUR_PROJECT_ID';
+ 
+// Instantiates a client
+// translate = new Translate({
+//   projectId: this.projectId,
+// });
+  // translate:Translate = new Translate({ projectId: this.projectId});
+
+  // translateText(source:String,dest:String,text:String){
+  // 	this.translate.translate(dest,source,dest)
+  // 	.then(results=>{
+
+  // 	});
+  // }
 //   // Imports the Google Cloud client library
 // const Translate = require('@google-cloud/translate');
  
@@ -26,7 +60,7 @@ export class AppComponent {
  
 // // Instantiates a client
 // const translate = new Translate({
-//   projectId: projectId,
+//   pro   jectId: projectId,
 // });
  
 // // The text to translate
@@ -46,4 +80,18 @@ export class AppComponent {
 //   .catch(err => {
 //     console.error('ERROR:', err);
 //   });
+
+
+ loadClient(): Promise<any> {
+     return new Promise((resolve, reject) => {
+         this.zone.run(() => {
+                gapi.load('client', {
+                    callback: resolve,
+                    onerror: reject,
+                    timeout: 1000, // 5 seconds.
+                    ontimeout: reject
+                });
+         });
+    });
+}
 }
