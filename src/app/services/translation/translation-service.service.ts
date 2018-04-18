@@ -13,19 +13,13 @@ export class TranslationServiceService {
   translationResult:TranslationApiresponse;
   baseURL = "https://translation.googleapis.com/language/translate/v2";
   httpOptions:HttpHeaders;
-
+  languagesURL = this.baseURL+"/languages";
+  
   constructor(private http: HttpClient) { 
-	// this.httpOptions = {
- //  		headers: new HttpHeaders({
- //    		'Content-Type':  'application/json'
- //    	})
-	// };
+
   }
 
   getTranslatedText(apiKey:String){
-  	// const options = 
-   // { params: new HttpParams().set('name', ) };
-
     const options = { 
     	params: new HttpParams()
     	.set('key', 'AIzaSyD2vreIeczCP7dnp5T2mHhptkHFlr6UFrA')
@@ -60,5 +54,15 @@ export class TranslationServiceService {
   //   };
   	// return this.http.get<TranslationApiresponse>(this.baseURL,options);
   // }
+
+  getAvailableTranslationLanguages(apiKey:String,targetLanguage:String){
+    const options = { 
+      params: new HttpParams()
+      .set('key', 'AIzaSyD2vreIeczCP7dnp5T2mHhptkHFlr6UFrA')
+      .set('target', 'en')
+      .set('model', 'nmt')
+    };
+    return this.http.get(this.languagesURL,options).toPromise();
+  }
 
 }

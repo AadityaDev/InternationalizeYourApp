@@ -19,6 +19,7 @@ export class AppComponent{
   zone:NgZone;
   r1;
   r2;
+  availablel
 
   constructor(private translationService:TranslationServiceService){
 
@@ -73,4 +74,15 @@ export class AppComponent{
     this.r2=this.translationService.getTranslatedTextWithInterface();
     console.log('res2 is: '+JSON.stringify(this.r2));    
   }
+
+  loadAvailableTranslationLanguages(){
+    this.translationService.getAvailableTranslationLanguages("","")
+    .then(
+      res=>{
+        this.r1=res;
+        console.log('res is: '+JSON.stringify(this.r1));
+      }
+    );
+  }
+
 }
