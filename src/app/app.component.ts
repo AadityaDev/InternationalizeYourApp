@@ -1,5 +1,9 @@
 import { Component,NgZone, Injectable, Optional } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
 import { Translate } from '@google-cloud/translate';
+import { TranslationServiceService } from './services/translation/translation-service.service';
+
 declare var gapi: any;
 
 @Component({
@@ -9,9 +13,16 @@ declare var gapi: any;
 })
 
 export class AppComponent{
+  
   title = 'app';
   projectId = "internationalize-1523953329065";
   zone:NgZone;
+  r1;
+  r2;
+
+  constructor(private translationService:TranslationServiceService){
+
+  }
 
   ngOnInit(): void {
     // this.apiLoaderService.loadClient().then(
@@ -33,54 +44,7 @@ export class AppComponent{
             gapi.client.init(initObj).then(resolve, reject);
         });
     });
-}
-  // Imports the Google Cloud client library
- // Translate = require('@google-cloud/translate');
- 
-// Your Google Cloud Platform project ID
-// const projectId = 'YOUR_PROJECT_ID';
- 
-// Instantiates a client
-// translate = new Translate({
-//   projectId: this.projectId,
-// });
-  // translate:Translate = new Translate({ projectId: this.projectId});
-
-  // translateText(source:String,dest:String,text:String){
-  // 	this.translate.translate(dest,source,dest)
-  // 	.then(results=>{
-
-  // 	});
-  // }
-//   // Imports the Google Cloud client library
-// const Translate = require('@google-cloud/translate');
- 
-// // Your Google Cloud Platform project ID
-// const projectId = 'YOUR_PROJECT_ID';
- 
-// // Instantiates a client
-// const translate = new Translate({
-//   pro   jectId: projectId,
-// });
- 
-// // The text to translate
-// const text = 'Hello, world!';
-// // The target language
-// const target = 'ru';
- 
-// // Translates some text into Russian
-// translate
-//   .translate(text, target)
-//   .then(results => {
-//     const translation = results[0];
- 
-//     console.log(`Text: ${text}`);
-//     console.log(`Translation: ${translation}`);
-//   })
-//   .catch(err => {
-//     console.error('ERROR:', err);
-//   });
-
+  }
 
  loadClient(): Promise<any> {
      return new Promise((resolve, reject) => {
@@ -93,5 +57,20 @@ export class AppComponent{
                 });
          });
     });
-}
+  }
+
+  loadTextTranslation(){
+    this.translationService.getTranslatedText("")
+    .then(
+      res=>{
+        this.r1=res;
+        console.log('res is: '+JSON.stringify(this.r1));
+      }
+    );
+  }
+  
+  loadTextTranslationFull(){
+    this.r2=this.translationService.getTranslatedTextWithInterface();
+    console.log('res2 is: '+JSON.stringify(this.r2));    
+  }
 }
